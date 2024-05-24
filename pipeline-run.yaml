@@ -14,3 +14,4 @@ spec:
       value: "playbook.yml"
     - name: inventory
       value: "inventory.ini"
+      
