@@ -1,0 +1,28 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: ansible-pipeline
+spec:
+  params:
+    - name: git-url
+      type: string
+    - name: git-revision
+      type: string
+      default: "main"
+    - name: ansible-playbook
+      type: string
+    - name: inventory
+      type: string
+  tasks:
+    - name: run-ansible-playbook
+      taskRef:
+        name: run-ansible-playbook
+      params:
+        - name: git-url
+          value: $(params.git-url)
+        - name: git-revision
+          value: $(params.git-revision)
+        - name: ansible-playbook
+          value: $(params.ansible-playbook)
+        - name: inventory
+          value: $(params.inventory)
