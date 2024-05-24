@@ -1,0 +1,33 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  name: run-ansible-playbook
+spec:
+  params:
+    - name: git-url
+      type: string
+      description: The Git repository URL
+    - name: git-revision
+      type: string
+      description: The Git revision to check out (branch, tag, commit)
+      default: "main"
+    - name: ansible-playbook
+      type: string
+      description: The relative path to the Ansible playbook in the repository
+    - name: inventory
+      type: string
+      description: The relative path to the inventory file in the repository
+  steps:
+    - name: git-clone
+      image: alpine/git
+      script: |
+        #!/bin/sh
+        git clone $(params.git-url) source
+        cd source
+        git checkout $(params.git-revision)
+    - name: run-ansible-playbook
+      image: ansible/ansible-runner
+      workingDir: /workspace/source
+      script: |
+        #!/bin/bash
+        ansible-playbook -i $(params.inventory) $(params.ansible-playbook)
