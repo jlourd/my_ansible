@@ -1,0 +1,16 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  name: ansible-pipeline-run
+spec:
+  pipelineRef:
+    name: ansible-pipeline
+  params:
+    - name: git-url
+      value: "https://github.com/your-repo/your-ansible-playbooks.git"
+    - name: git-revision
+      value: "main"
+    - name: ansible-playbook
+      value: "playbook.yml"
+    - name: inventory
+      value: "inventory.ini"
